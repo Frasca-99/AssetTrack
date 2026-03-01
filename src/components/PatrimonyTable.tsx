@@ -26,9 +26,10 @@ interface PatrimonyTableProps {
   onToggleSelectAll: () => void;
   isAdmin: boolean;
   currentUserId?: string;
+  showCreatorEmail?: boolean; // true for admins
 }
 
-export function PatrimonyTable({ patrimonies, onViewDetails, onEdit, onDelete, selectedIds, onToggleSelect, onToggleSelectAll, isAdmin, currentUserId }: PatrimonyTableProps) {
+export function PatrimonyTable({ patrimonies, onViewDetails, onEdit, onDelete, selectedIds, onToggleSelect, onToggleSelectAll, isAdmin, currentUserId, showCreatorEmail }: PatrimonyTableProps) {
   const statusVariant = (status: string) => 
     status === "Perda total" 
       ? "destructive" 
@@ -86,7 +87,12 @@ export function PatrimonyTable({ patrimonies, onViewDetails, onEdit, onDelete, s
                 </TableCell>
                 <TableCell className="font-mono text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">#{patrimony.number}</TableCell>
                 <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap px-2 sm:px-4">{patrimony.model}</TableCell>
-                <TableCell className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">{patrimony.registeredBy}</TableCell>
+                <TableCell className="text-xs sm:text-sm whitespace-nowrap px-2 sm:px-4">
+                  <span>{patrimony.creatorName || patrimony.registeredBy}</span>
+                  {showCreatorEmail && patrimony.creatorEmail && (
+                    <span className="text-[10px] text-muted-foreground block">{patrimony.creatorEmail}</span>
+                  )}
+                </TableCell>
                 <TableCell className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap px-2 sm:px-4">{new Date(patrimony.registeredAt).toLocaleDateString('pt-BR')}</TableCell>
                 <TableCell className="whitespace-nowrap px-2 sm:px-4">
                   <Badge variant={statusVariant(patrimony.status)} className="text-[10px] sm:text-xs font-normal px-1.5 sm:px-2">

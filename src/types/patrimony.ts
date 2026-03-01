@@ -6,7 +6,7 @@ export interface Patrimony {
   id: string;
   number: string;
   model: string;
-  registeredBy: string;
+  registeredBy: string;      // auto-populated with creator's full_name
   registeredAt: Date;
   observations: string;
   status: PatrimonyStatus;
@@ -14,4 +14,7 @@ export interface Patrimony {
   customLocation?: string;
   problem?: PatrimonyProblem;
   userId: string;
+  empresaId?: string;
+  creatorName?: string;      // from JOIN with profiles
+  creatorEmail?: string;     // from JOIN with profiles (shown only to admins)
 }

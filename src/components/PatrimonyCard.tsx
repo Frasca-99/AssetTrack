@@ -3,9 +3,10 @@ import { Badge } from "@/components/ui/badge";
 
 interface PatrimonyCardProps {
   patrimony: Patrimony;
+  showCreatorEmail?: boolean;
 }
 
-export function PatrimonyCard({ patrimony }: PatrimonyCardProps) {
+export function PatrimonyCard({ patrimony, showCreatorEmail }: PatrimonyCardProps) {
   const statusVariant = patrimony.status === "Perda total" 
     ? "destructive" 
     : patrimony.status === "Finalizada" || patrimony.status === "Entregue"
@@ -27,7 +28,10 @@ export function PatrimonyCard({ patrimony }: PatrimonyCardProps) {
       <div className="space-y-4">
         <div>
           <p className="text-xs text-muted-foreground mb-1">Cadastrado por</p>
-          <p className="text-sm">{patrimony.registeredBy}</p>
+          <p className="text-sm">{patrimony.creatorName || patrimony.registeredBy}</p>
+          {showCreatorEmail && patrimony.creatorEmail && (
+            <p className="text-xs text-muted-foreground">{patrimony.creatorEmail}</p>
+          )}
         </div>
 
         <div>
