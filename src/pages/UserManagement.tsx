@@ -143,12 +143,12 @@ const UserManagement = () => {
 
   const handleRemove = async (memberId: string) => {
     try {
-      await supabase.from("profiles").update({ empresa_id: null }).eq("id", memberId);
-      await supabase.from("user_roles").delete().eq("user_id", memberId);
-      if (empresaId) await fetchMembers(empresaId);
+      const { error } = await supabase.rpc("remover_membro", { _target_user_id: memberId });
+      if (error) throw error;
+      setMembers(prev => prev.filter(m => m.id !== memberId));
       toast.success("Usuário removido da empresa.");
-    } catch {
-      toast.error("Erro ao remover usuário.");
+    } catch (err: any) {
+      toast.error(err.message || "Erro ao remover usuário.");
     }
   };
 

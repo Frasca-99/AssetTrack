@@ -14,12 +14,76 @@ export type Database = {
   }
   public: {
     Tables: {
+      empresas: {
+        Row: {
+          cnpj: string | null
+          created_at: string
+          id: string
+          invite_code: string
+          logo_url: string | null
+          nome: string
+          status: string
+        }
+        Insert: {
+          cnpj?: string | null
+          created_at?: string
+          id?: string
+          invite_code?: string
+          logo_url?: string | null
+          nome: string
+          status?: string
+        }
+        Update: {
+          cnpj?: string | null
+          created_at?: string
+          id?: string
+          invite_code?: string
+          logo_url?: string | null
+          nome?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      logs_auditoria: {
+        Row: {
+          acao: string
+          data_hora: string
+          detalhes: Json | null
+          empresa_id: string
+          entidade: string
+          entidade_id: string | null
+          id: string
+          usuario_id: string | null
+        }
+        Insert: {
+          acao: string
+          data_hora?: string
+          detalhes?: Json | null
+          empresa_id: string
+          entidade: string
+          entidade_id?: string | null
+          id?: string
+          usuario_id?: string | null
+        }
+        Update: {
+          acao?: string
+          data_hora?: string
+          detalhes?: Json | null
+          empresa_id?: string
+          entidade?: string
+          entidade_id?: string | null
+          id?: string
+          usuario_id?: string | null
+        }
+        Relationships: []
+      }
       patrimonies: {
         Row: {
           created_at: string
           custom_location: string | null
           deleted_at: string | null
           deleted_by: string | null
+          empresa_id: string | null
           id: string
           location: string
           model: string
@@ -30,13 +94,14 @@ export type Database = {
           registered_by: string
           status: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           custom_location?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
+          empresa_id?: string | null
           id?: string
           location: string
           model: string
@@ -47,13 +112,14 @@ export type Database = {
           registered_by: string
           status: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           custom_location?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
+          empresa_id?: string | null
           id?: string
           location?: string
           model?: string
@@ -64,7 +130,7 @@ export type Database = {
           registered_by?: string
           status?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -72,6 +138,13 @@ export type Database = {
             columns: ["deleted_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patrimonies_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
             referencedColumns: ["id"]
           },
           {
@@ -86,6 +159,8 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          email: string | null
+          empresa_id: string | null
           full_name: string | null
           id: string
           organization: string | null
@@ -93,6 +168,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          email?: string | null
+          empresa_id?: string | null
           full_name?: string | null
           id: string
           organization?: string | null
@@ -100,12 +177,22 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          email?: string | null
+          empresa_id?: string | null
           full_name?: string | null
           id?: string
           organization?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -133,12 +220,40 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      atualizar_empresa: {
+        Args: { _nome: string; _logo_url?: string | null }
+        Returns: undefined
+      }
+      criar_empresa: {
+        Args: { _nome: string; _cnpj?: string | null }
+        Returns: string
+      }
+      sair_empresa: {
+        Args: Record<never, never>
+        Returns: undefined
+      }
+      entrar_empresa: {
+        Args: { _code: string }
+        Returns: string
+      }
+      get_user_empresa_id: {
+        Args: { _user_id: string }
+        Returns: string | null
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      regenerar_invite_code: {
+        Args: { _empresa_id: string }
+        Returns: string
+      }
+      remover_membro: {
+        Args: { _target_user_id: string }
+        Returns: undefined
       }
     }
     Enums: {

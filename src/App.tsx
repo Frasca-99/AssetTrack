@@ -9,6 +9,7 @@ import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import UserManagement from "./pages/UserManagement";
 import AuditLog from "./pages/AuditLog";
+import CompanySettings from "./pages/CompanySettings";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/app" element={<Index />} />
           <Route path="/app/usuarios" element={<UserManagement />} />
           <Route path="/app/auditoria" element={<AuditLog />} />
+          <Route path="/app/empresa" element={<CompanySettings />} />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

@@ -505,15 +505,22 @@ const Index = () => {
               )}
             </div>
 
-            {/* Admin nav links */}
-            {isAdmin && (
+            {/* Nav links */}
+            {empresaId && (
               <nav className="hidden sm:flex items-center gap-1">
                 <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5" asChild>
-                  <Link to="/app/usuarios"><Users className="w-3.5 h-3.5" />Usuários</Link>
+                  <Link to="/app/empresa"><Building2 className="w-3.5 h-3.5" />Empresa</Link>
                 </Button>
-                <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5" asChild>
-                  <Link to="/app/auditoria"><ClipboardList className="w-3.5 h-3.5" />Auditoria</Link>
-                </Button>
+                {isAdmin && (
+                  <>
+                    <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5" asChild>
+                      <Link to="/app/usuarios"><Users className="w-3.5 h-3.5" />Usuários</Link>
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5" asChild>
+                      <Link to="/app/auditoria"><ClipboardList className="w-3.5 h-3.5" />Auditoria</Link>
+                    </Button>
+                  </>
+                )}
               </nav>
             )}
 
